@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bidirectional Translator (English ↔ Konkani)</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="translator_styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Bidirectional Translator (English ↔ Konkani)</h1>
+        
+        <form action="/translate" method="post">
+            <label for="input_word">Enter a word (English or Konkani):</label><br>
+            <input type="text" id="input_word" name="input_word" autocomplete="off" required>
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+            <br><br>
+            <input type="submit" value="Translate">
+        </form>
+
+        {% if input_word %}
+            <h2>Translation Result:</h2>
+            <p><strong>Input Word:</strong> {{ input_word }}</p>
+
+            {% if translations[0] == "Translation not found" %}
+                <p style="color: red;"><strong>Translation not found.</strong></p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>Context</th>
+                        <th>Translations</th>
+                    </tr>
+                    {% for context, words in translations %}
+                    <tr>
+                        <td>{{ context if context else input_word }}</td>
+                        <td>{{ ", ".join(words) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

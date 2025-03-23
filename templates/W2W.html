@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bidirectional Translator (English ↔ Konkani)</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: #e6ebf1;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+            margin: auto;
+            position: relative;
+        }
+        h1 {
+            font-size: 24px;
+            color: #44a18d;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #44a18d;
+            color: white;
+            cursor: pointer;
+        }
+        .autocomplete-list {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            width: calc(100% - 20px);
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+        .autocomplete-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .autocomplete-item:hover {
+            background: #f0f0f0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #44a18d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h1>Bidirectional Translator (English ↔ Konkani)</h1>
+        
+        <form action="/translate" method="post">
+            <label for="input_word">Enter a word (English or Konkani):</label><br>
+            <input type="text" id="input_word" name="input_word" autocomplete="off" required>
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+            <br><br>
+            <input type="submit" value="Translate">
+        </form>
+
+        {% if input_word %}
+            <h2>Translation Result:</h2>
+            <p><strong>Input Word:</strong> {{ input_word }}</p>
+
+            {% if translations[0] == "Translation not found" %}
+                <p style="color: red;"><strong>Translation not found.</strong></p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>Context</th>
+                        <th>Translations</th>
+                    </tr>
+                    {% for context, words in translations %}
+                    <tr>
+                        <td>{{ context if context else input_word }}</td>
+                        <td>{{ ", ".join(words) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#input_word").on("input", function() {
+                let query = $(this).val();
+                if (query.length > 0) {
+                    $.getJSON("/autocomplete", {query: query}, function(data) {
+                        let dropdown = $("#autocomplete-list");
+                        dropdown.empty().show();
+                        data.forEach(function(item) {
+                            dropdown.append(`<div class="autocomplete-item">${item}</div>`);
+                        });
+
+                        $(".autocomplete-item").on("click", function() {
+                            $("#input_word").val($(this).text());
+                            dropdown.hide();
+                        });
+                    });
+                } else {
+                    $("#autocomplete-list").hide();
+                }
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest("#input_word, #autocomplete-list").length) {
+                    $("#autocomplete-list").hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
