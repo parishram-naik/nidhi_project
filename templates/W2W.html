@@ -1,73 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bidirectional Translator (English ↔ Konkani)</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #e6ebf1;
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --text-color: #1e293b;
+            --background-color: #f8fafc;
+            --accent-red: #ef4444;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fb 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
         .form-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 400px;
-            margin: auto;
+            background: white;
+            border-radius: 1.25rem;
+            padding: 2.5rem;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 480px;
+            margin: 1rem;
             position: relative;
         }
+
         h1 {
-            font-size: 24px;
-            color: #44a18d;
-            margin-bottom: 20px;
+            font-size: 1.875rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
-        input[type="text"], input[type="submit"] {
+
+        form {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        input[type="text"] {
             width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+            background: #f8fafc;
         }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(68, 161, 141, 0.15);
+            background: white;
+        }
+
         input[type="submit"] {
-            background-color: #44a18d;
+            background-color: var(--primary-color);
             color: white;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.25s ease;
+            width: 100%;
+            margin-top: 1.5rem;
         }
+
+        input[type="submit"]:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(68, 161, 141, 0.2);
+        }
+
         .autocomplete-list {
             position: absolute;
             background: white;
-            border: 1px solid #ddd;
-            width: calc(100% - 20px);
-            max-height: 150px;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-height: 200px;
             overflow-y: auto;
             display: none;
             z-index: 1000;
+            margin-top: 0.5rem;
         }
+
         .autocomplete-item {
-            padding: 8px;
+            padding: 1rem 1.5rem;
             cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            color: var(--text-color);
         }
+
         .autocomplete-item:hover {
-            background: #f0f0f0;
+            background: #f8fafc;
+            transform: translateX(4px);
         }
+
+        .translation-result {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f1f5f9;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 1.25rem;
         }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
+
+        th,
+        td {
+            padding: 1rem 1.5rem;
             text-align: left;
+            border-bottom: 1px solid #f1f5f9;
         }
+
         th {
-            background-color: #44a18d;
+            background-color: var(--primary-color);
             color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        td {
+            font-size: 0.9rem;
+            color: #5c677d;
+        }
+
+        .error-message {
+            color: var(--accent-red);
+            background: #fff5f5;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #ffe3e3;
+            margin-top: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 1.75rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1.75rem;
+            }
+
+            input[type="text"] {
+                padding: 0.875rem;
+            }
+
+            th,
+            td {
+                padding: 0.875rem 1.25rem;
+            }
+
+            .autocomplete-item {
+                padding: 0.875rem 1.25rem;
+            }
         }
     </style>
 </head>
@@ -75,51 +195,58 @@
 <body>
     <div class="form-container">
         <h1>Bidirectional Translator (English ↔ Konkani)</h1>
-        
+
         <form action="/translate" method="post">
-            <label for="input_word">Enter a word (English or Konkani):</label><br>
-            <input type="text" id="input_word" name="input_word" autocomplete="off" required>
+            <input type="text" id="input_word" name="input_word" autocomplete="off" required
+                placeholder="Enter a word (English or Konkani)">
             <div id="autocomplete-list" class="autocomplete-list"></div>
-            <br><br>
             <input type="submit" value="Translate">
         </form>
 
         {% if input_word %}
-            <h2>Translation Result:</h2>
+        <div class="translation-result">
+            <h2>Translation Result</h2>
             <p><strong>Input Word:</strong> {{ input_word }}</p>
 
             {% if translations[0] == "Translation not found" %}
-                <p style="color: red;"><strong>Translation not found.</strong></p>
+            <div class="error-message">
+                <strong>Translation not found</strong>
+            </div>
             {% else %}
-                <table>
+            <table>
+                <thead>
                     <tr>
                         <th>Context</th>
                         <th>Translations</th>
                     </tr>
+                </thead>
+                <tbody>
                     {% for context, words in translations %}
                     <tr>
                         <td>{{ context if context else input_word }}</td>
                         <td>{{ ", ".join(words) }}</td>
                     </tr>
                     {% endfor %}
-                </table>
+                </tbody>
+            </table>
             {% endif %}
+        </div>
         {% endif %}
     </div>
 
     <script>
-        $(document).ready(function() {
-            $("#input_word").on("input", function() {
+        $(document).ready(function () {
+            $("#input_word").on("input", function () {
                 let query = $(this).val();
                 if (query.length > 0) {
-                    $.getJSON("/autocomplete", {query: query}, function(data) {
+                    $.getJSON("/autocomplete", { query: query }, function (data) {
                         let dropdown = $("#autocomplete-list");
                         dropdown.empty().show();
-                        data.forEach(function(item) {
+                        data.forEach(function (item) {
                             dropdown.append(`<div class="autocomplete-item">${item}</div>`);
                         });
 
-                        $(".autocomplete-item").on("click", function() {
+                        $(".autocomplete-item").on("click", function () {
                             $("#input_word").val($(this).text());
                             dropdown.hide();
                         });
@@ -129,7 +256,7 @@
                 }
             });
 
-            $(document).click(function(e) {
+            $(document).click(function (e) {
                 if (!$(e.target).closest("#input_word, #autocomplete-list").length) {
                     $("#autocomplete-list").hide();
                 }
@@ -137,4 +264,5 @@
         });
     </script>
 </body>
+
 </html>

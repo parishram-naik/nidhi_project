@@ -1,87 +1,304 @@
-/* General body styling */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #e6ebf1;
+/* Modern Translator Styles */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary: #00B4A0;
+    --secondary: #009B8A;
+    --accent: #FF6B6B;
+    --dark: #2D4059;
+    --light: #F8F9FB;
+    --gray: #E9ECEF;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f8f9fb 0%, #e9ecef 100%);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-}
-
-/* Centering the form */
-.form-container {
-    background-color: white;
     padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    color: var(--dark);
+}
+
+/* Floating container animation */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.translator-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 560px;
+    margin: 1rem;
+    position: relative;
+    animation: float 6s ease-in-out infinite;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header {
     text-align: center;
-    width: 300px;
+    margin-bottom: 2.5rem;
 }
 
-/* Heading */
-h1 {
-    font-size: 24px;
-    color: #44a18d;
-    margin-bottom: 20px;
+.header h1 {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    /* -webkit-background-clip: text; */
+    -webkit-text-fill-color: transparent;
 }
 
-/* Labels */
-label {
-    font-size: 14px;
-    color: #4f4f4f;
+/* Input Field Styles */
+.input-group {
+    position: relative;
+    margin-bottom: 2rem;
 }
 
-/* Input fields */
-input[type="text"] {
+.input-field {
     width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-size: 14px;
+    padding: 1.2rem 1.5rem;
+    border: 2px solid var(--gray);
+    border-radius: 1rem;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Submit button */
-input[type="submit"] {
-    background-color: #44a18d;
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(0, 180, 160, 0.2);
+    background: white;
+}
+
+/* Animated Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    padding: 10px 20px;
+    padding: 1.2rem 2rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 14px;
+    transition: var(--transition);
     width: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
-input[type="submit"]:hover {
-    background-color: #368c74;
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 180, 160, 0.3);
 }
 
-/* Translation result styling */
-h2 {
-    font-size: 20px;
-    color: #4f4f4f;
-    margin-bottom: 10px;
+.submit-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: var(--transition);
 }
 
-p, ul {
-    font-size: 14px;
-    color: #4f4f4f;
+.submit-btn:hover::after {
+    left: 120%;
 }
 
-/* Styling the list of translations */
-ul {
-    list-style-type: none;
-    padding: 0;
+/* Modern Autocomplete */
+.autocomplete-list {
+    position: absolute;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 0.5rem;
+    animation: slideDown 0.3s ease-out;
 }
 
-ul li {
-    background-color: #e6ebf1;
-    padding: 5px;
-    margin: 5px 0;
-    border-radius: 5px;
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.autocomplete-item {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.autocomplete-item:hover {
+    background: var(--light);
+    padding-left: 2rem;
+}
+
+.autocomplete-item::before {
+    content: '🔍';
+    opacity: 0.6;
+}
+
+/* Results Section */
+.results-section {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.results-table th {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 1.2rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.results-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.results-table tr:last-child td {
+    border-bottom: none;
+}
+
+.results-table tr:hover td {
+    background: var(--light);
+}
+
+/* Error Animation */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(8px);
+    }
+
+    75% {
+        transform: translateX(-8px);
+    }
+}
+
+.error-message {
+    background: #FFF5F5;
+    color: var(--accent);
+    padding: 1.2rem;
+    border-radius: 1rem;
+    border: 1px solid #FFE3E3;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: shake 0.4s ease-in-out;
+}
+
+.error-message::before {
+    content: '⚠️';
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .translator-container {
+        padding: 1.8rem;
+        margin: 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.6rem;
+    }
+
+    .input-field {
+        padding: 1rem;
+    }
+
+    .results-table th,
+    .results-table td {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 1rem;
+    }
+
+    .translator-container {
+        border-radius: 1rem;
+        padding: 1.5rem;
+    }
+
+    .autocomplete-item {
+        padding: 0.8rem 1rem;
+    }
 }
